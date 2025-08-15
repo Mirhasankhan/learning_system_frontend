@@ -38,10 +38,8 @@ export default function RootLayout({
         >
           <Providers>
             <div>
-              <ToastContainer position="top-right" autoClose={3000} />
-              <h1>footer</h1>
-              <div className="min-h-80">{children}</div>
-              <div>footer</div>
+              <ToastContainer position="top-right" autoClose={3000} />             
+              <div className="min-h-80">{children}</div>           
             </div>
           </Providers>
         </ThemeProvider>
