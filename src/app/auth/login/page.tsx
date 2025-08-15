@@ -2,7 +2,6 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TLoginValues } from "@/types/common";
-import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
@@ -25,20 +24,19 @@ const Login = () => {
   const onSubmit: SubmitHandler<TLoginValues> = async (data) => {
     try {
       const response: any = await loginUser(data);
-
-      if (response.data?.result?.accessToken) {
+      
+      if (response.data) {
         toast.success("Login Successful");
       
         router.push("/");
         dispatch(
           setUser({
-            name: response.data.result.userInfo.username,
-            email: response.data.result.userInfo.email,
-            role: response.data.result.userInfo.role,
-            token: response.data.result.accessToken,
+            name: response.data.data.userInfo.fullName,
+            email: response.data.data.userInfo.email,           
+            token: response.data.data.accessToken,
           })
         );
-        Cookies.set("token", response.data?.result.accessToken);
+        Cookies.set("token", response.data?.data.accessToken);
       } else if (response.error) {
         toast.error(response.error.data.message);
       }
@@ -88,7 +86,7 @@ const Login = () => {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
-          <div className="flex justify-between items-center py-3">
+          {/* <div className="flex justify-between items-center py-3">
             <div className="flex items-center space-x-2">
               <Checkbox id="terms" />
               <label
@@ -104,7 +102,7 @@ const Login = () => {
             >
               Forgot Password?
             </Link>
-          </div>
+          </div> */}
           {/* <button
             disabled={isLoading}
             type="submit"

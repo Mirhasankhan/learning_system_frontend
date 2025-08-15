@@ -2,30 +2,23 @@ import { baseApi } from "../../api/baseApi";
 
 const bookingsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    allBookings: builder.query({
+    allCourses: builder.query({
       query: () => ({
-        url: `/order/admin-list`,
+        url: `/course`,
         method: "GET",
       }),
-      providesTags: ["users"],
+      providesTags: ["course"],
     }),
-   
-    createBooking: builder.mutation({
+
+    createCourse: builder.mutation({
       query: (data) => ({
-        url: `/booking/create`,
+        url: `/course/create`,
         method: "POST",
-        body: data
+        body: data,
       }),
-      invalidatesTags: ["users"],
+      invalidatesTags: ["course"],
     }),
-   
-   
-    
-   
   }),
 });
 
-export const {
-  useAllBookingsQuery,
-  useCreateBookingMutation,
-} = bookingsApi;
+export const { useAllCoursesQuery, useCreateCourseMutation } = bookingsApi;

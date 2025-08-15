@@ -3,8 +3,13 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TLoginValues } from "@/types/common";
 import Link from "next/link";
+import { useSignupRequestMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const router = useRouter();
+  const [signupRequest, { isLoading }] = useSignupRequestMutation();
   const {
     register,
     handleSubmit,
@@ -12,7 +17,18 @@ const Register = () => {
   } = useForm<TLoginValues>();
 
   const onSubmit: SubmitHandler<TLoginValues> = async (data) => {
-    console.log(data);
+    const userData = {
+      ...data,
+      role: "User",
+    };
+    const response: any = await signupRequest(userData);
+    if (response.data) {
+      toast.success(
+        "Your request has been submitted. An OTP has been sent to your email."
+      );
+    }
+    router.push("/auth/verify-email");
+    localStorage.setItem("verify", data.email)
   };
 
   return (
@@ -25,14 +41,14 @@ const Register = () => {
           <div className="mb-4">
             <label className="block pb-1 font-medium">Full Name</label>
             <input
-              {...register("username", {
+              {...register("fullName", {
                 required: "Full name is required",
               })}
               className="w-full p-2 border rounded-[4px]"
               placeholder="Enter your fullname"
             />
-            {errors.username && (
-              <p className="text-red-500 text-sm">{errors.username.message}</p>
+            {errors.fullName && (
+              <p className="text-red-500 text-sm">{errors.fullName.message}</p>
             )}
           </div>
           <div className="mb-4">
@@ -67,10 +83,11 @@ const Register = () => {
             )}
           </div>
           <button
+            disabled={isLoading}
             type="submit"
             className="bg-primary text-white py-3 w-full font-medium rounded-[4px]"
           >
-            Create Account
+            {isLoading ? "Creating..." : "Create Account"}
           </button>
         </form>
 

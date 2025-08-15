@@ -1,9 +1,15 @@
-
 import { baseApi } from "../../api/baseApi";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation({
+    signupRequest: builder.mutation({
+      query: (userInfo) => ({
+        url: "/users/pending",
+        method: "POST",
+        body: userInfo,
+      }),
+    }),
+    verifyEmail: builder.mutation({
       query: (userInfo) => ({
         url: "/users/create",
         method: "POST",
@@ -17,21 +23,7 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
-    socialLogin: builder.mutation({
-      query: (userInfo) => ({
-        url: "/auth/social-login",
-        method: "POST",
-        body: userInfo,
-      }),
-    }),
-    profile: builder.query({
-      query: () => ({
-        url: "/auth/profile",
-        method: "GET",
-        
-      }),
-      providesTags:["users"]
-    }),
+
     sendOtp: builder.mutation({
       query: (email) => ({
         url: "/auth/send-otp",
@@ -53,29 +45,6 @@ const authApi = baseApi.injectEndpoints({
         body: newPassword,
       }),
     }),
-    changePassword: builder.mutation({
-      query: (newPassword) => ({
-        url: "/auth/reset-password",
-        method: "PATCH",
-        body: newPassword,
-      }),
-    }),
-    updateImage: builder.mutation({
-      query: (image) => ({
-        url: "/users/update/profileImage",
-        method: "PUT",
-        body: image,
-      }),
-      invalidatesTags:["users"]
-    }),
-    updateProfile: builder.mutation({
-      query: (data) => ({
-        url: "/users/update",
-        method: "PUT",
-        body: data,
-      }),
-      invalidatesTags:["users"]
-    }),
 
     allUsers: builder.query({
       query: ({ searchQuery, selectedRole, page, limit }) => ({
@@ -84,27 +53,15 @@ const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["users"],
     }),
-
-    updateUserStatus: builder.mutation({
-      query: (id) => ({
-        url: `users/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["users"],
-    }),
   }),
 });
 
 export const {
+  useSignupRequestMutation,
   useSendOtpMutation,
-  useRegisterMutation,
-  useProfileQuery,
-  useUpdateImageMutation,
+  useVerifyEmailMutation,
   useLoginMutation,
   useAllUsersQuery,
-  useUpdateUserStatusMutation,
-  useUpdateProfileMutation,
-  useSocialLoginMutation,
   useVerifyOtpMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
 } = authApi;

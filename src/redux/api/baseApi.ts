@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://glamvibe-backend.vercel.app/api/v1/",
+    baseUrl: "http://localhost:4004/api/v1",
     prepareHeaders: (headers) => {
       const {token} = JWTDecode()
       if (token) {
@@ -14,6 +14,6 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["users","bookings","service"],
+  tagTypes: ["users","course","service"],
   endpoints: () => ({}),
 });
